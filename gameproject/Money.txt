@@ -1,0 +1,58 @@
+@name <Money processing>
+@inputs EGP:wirelink User:entity Game
+@outputs Success Forcer Door ClosestPlayer:entity 
+@persist Break
+interval(1000)
+if(first()) {
+EGP:egpClear()
+Door = 0
+EGP:egpBox(1,vec2(256,256),vec2(512,512))
+EGP:egpColor(1,vec(75,75,75))
+function number wirelink:onClick(Player:entity,ID){
+        local P=This:egpPos(ID)
+        local H=This:egpSize(ID)/2
+        return inrange(This:egpCursor(Player),P-H,P+H)
+}   
+}
+
+findByClass("player")
+ClosestPlayer = findClosest(entity():pos())
+if(ClosestPlayer&ClosestPlayer:pos():distance(entity():pos())<120) {
+EGP:egpText(2,"Welcome " + ClosestPlayer:name() + " To the arena",vec2(256,20))
+EGP:egpAlign(2,1,1)
+EGP:egpSize(2,25)
+if(Door == 0) {
+EGP:egpBox(3,vec2(256,256),vec2(200,50))
+EGP:egpColor(3,vec(125,125,125)) 
+EGP:egpText(4,"Enter the arena",vec2(256,256))
+EGP:egpAlign(4,1,1)
+}
+if(Door == 1) {
+EGP:egpBox(5,vec2(256,256),vec2(200,50))
+EGP:egpColor(5,vec(125,125,125)) 
+EGP:egpText(6,"Sorry, were closed",vec2(256,256))
+EGP:egpAlign(6,1,1)
+}
+}
+else {
+EGP:egpRemove(2)
+EGP:egpRemove(3)
+EGP:egpRemove(4)   
+EGP:egpRemove(5)
+EGP:egpRemove(6)
+}
+if(EGP:onClick(User,3)) {
+moneyRequest(User,500,10,"Welcome")
+}
+if(moneyClk("Welcome")) {
+soundPlay(1,1,"items/cart_explode_trigger.wav")
+Success = 1
+Forcer = 100
+Door = 1
+timer("reset",3000)   
+}
+if(clk("reset")) {
+Success = 0
+Forcer = 0
+Door = 0
+}

@@ -1,0 +1,16 @@
+@name KOS Inside sign
+@inputs EGP:wirelink
+@persist 
+if(first()) {
+EGP:egpClear()
+EGP:egpCircle(1,vec2(256,256),vec2(100,100))
+EGP:egpColor(1,vec(214,45,32)) 
+EGP:egpCircle(2,vec2(256,256),vec2(90,90))
+EGP:egpColor(2,vec(75,75,75))
+EGP:egpBox(3,vec2(256,256),vec2(200,20))
+EGP:egpColor(3,vec(214,45,32))
+EGP:egpAngle(3,-30)
+EGP:egpText(4,"KOS ON OR AFTER THIS BRIDGE",vec2(256,400))
+EGP:egpAlign(4,1,1)
+EGP:egpSize(4,60)
+}

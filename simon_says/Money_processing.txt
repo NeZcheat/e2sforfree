@@ -1,0 +1,42 @@
+@name Money processing
+@inputs EGP:wirelink User:entity
+@outputs Success Forcer Door
+@persist ClosestPlayer:entity
+interval(1000)
+if(first()) {
+EGP:egpClear()
+EGP:egpBox(1,vec2(256,256),vec2(512,512))
+EGP:egpColor(1,vec(75,75,75))   
+Door = 1
+Hydraulic = 0
+function number wirelink:onClick(Player:entity,ID){
+        local P=This:egpPos(ID)
+        local H=This:egpSize(ID)/2
+        return inrange(This:egpCursor(Player),P-H,P+H)
+} 
+}
+findByClass("player")
+ClosestPlayer = findClosest(entity():pos())
+if(ClosestPlayer&ClosestPlayer:pos():distance(entity():pos())<100) {
+EGP:egpText(2,"Welcome " + ClosestPlayer:name() + " To Simon says",vec2(256,20))
+EGP:egpAlign(2,1,1)
+EGP:egpSize(2,25)
+EGP:egpBox(3,vec2(256,256),vec2(200,50))
+EGP:egpColor(3,vec(125,125,125)) 
+EGP:egpText(4,"Enter the game",vec2(256,256))
+EGP:egpAlign(4,1,1)
+}
+if(EGP:onClick(User,3)) {
+moneyRequest(User,500,10,"Enter")
+}
+if(moneyClk("Enter")) {
+Forcer = 200
+Door = 0   
+Success = 1
+timer("stop",2000)
+}
+if(clk("stop")) {
+Success = 0
+Door = 1
+Forcer = 0
+}

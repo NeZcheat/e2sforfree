@@ -1,0 +1,62 @@
+@name !roll E2
+@inputs 
+@outputs 
+@persist Random Amount Player2:entity Adon Ad:string
+@trigger 
+if(first()) {
+print("Say !advert [your advertisement] to have a ad going off every 30 seconds.")
+print("(To use this you need to put in console wire_expression2_concmd_1)")
+print("To disable the advert type !dadvert")   
+}
+runOnChat(1)                                                                                                                       
+if(chatClk()){
+local LastSaid = lastSaid():explode(" ")
+local Player = lastSpoke()
+if(LastSaid[1,string] == "!roll") {
+hideChat(1)
+moneyRequest(Player,LastSaid[2,string]:toNumber(),10,"Buy a !roll")
+Player2 = Player
+Amount = LastSaid[2,string]:toNumber()
+}
+}
+if(moneyClk("Buy a !roll")) {
+Random = randint(1,100)
+concmd("say /pm " + Player2:name() + " You rolled a " + Random)    
+if(Random >= 50 & Random <= 60) {
+moneyGive(Player2,Amount)
+}
+if(Random >= 80 & Random <= 99) {
+moneyGive(Player2,Amount * 3)   
+}
+if(Random == 100) {
+moneyGive(Player2,Amount * 5)
+concmd("say /a " + Player2:name() + " Just won " + Amount*5 + " using !roll [amount]")     
+}
+}
+if(chatClk()){
+local LastSaid = lastSaid():explode(" ")
+local Player = lastSpoke()
+if(LastSaid[1,string] == "!advert" & Player == owner()) {
+hideChat(1)
+timer("advertisement",30000)
+print("Starting from now every 30 seconds your ad will be advertised using /advert, disable this by saying !dadvert")
+Ad = LastSaid:concat(" ",2)
+Adon = 1
+}
+}
+if(chatClk()){
+local LastSaid = lastSaid():explode(" ")
+local Player = lastSpoke()
+if(LastSaid[1,string] == "!dadvert" & Player == owner()) {
+hideChat(1)
+print("You have succesfully cancelled adverting for the lottery")
+Adon = 0
+}
+}
+if(clk("advertisement")) {
+if(Adon == 1) {
+concmd("say /a " + Ad)   
+timer("advertisement",30000)
+}
+}
+

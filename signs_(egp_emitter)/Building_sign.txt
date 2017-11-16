@@ -1,0 +1,33 @@
+@name Building sign
+@inputs EGP:wirelink
+@outputs Animation
+if(first()) {
+EGP:egpClear()
+EGP:egpText(1,"Building, KOS inside",vec2(256,246))
+EGP:egpAlign(1,1,1)   
+EGP:egpBox(2,vec2(300,350),vec2(50,50))
+EGP:egpColor(2,vec(139,69,19))
+EGP:egpBox(3,vec2(256,325),vec2(20,100))
+EGP:egpColor(3,vec(75,75,75))
+EGP:egpBox(4,vec2(0,-50),vec2(80,20))
+EGP:egpParent(4,3)
+timer("anim",100)
+}
+if(clk("anim")) {
+    stoptimer("anim2")
+    Animation = Animation - 1
+    EGP:egpAngle(3,Animation) 
+    timer("anim",100)  
+    if(Animation == -50) {
+        timer("anim2",50)   
+    }
+}
+if(clk("anim2")) {
+    stoptimer("anim")
+    Animation = Animation + 1
+    EGP:egpAngle(3,Animation)
+    timer("anim2",100)
+    if(Animation == 0) {
+        timer("anim",50)   
+    }
+}

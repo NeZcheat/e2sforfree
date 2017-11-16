@@ -1,0 +1,101 @@
+@name Server details
+@inputs EGP:wirelink User:entity ClosestPlayer:entity
+@outputs  
+@persist Day Dedicated
+runOnChat(1)
+interval(1000)
+if(first()) {
+function start() {
+EGP:egpClear()
+EGP:egpBox(1,vec2(256,256),vec2(512,512))
+EGP:egpColor(1,vec(75,75,75))
+EGP:egpBox(11,vec2(256,140),vec2(300,230))
+EGP:egpColor(11,vec(60,60,60))
+#EGP:egpText(2,"Say !d [amount] to donate to me!",vec2(256,266))
+#EGP:egpAlign(2,1,1)
+EGP:egpText(3,hostname(),vec2(256,10))
+EGP:egpAlign(3,1,1)
+EGP:egpSize(3,13)
+EGP:egpText(4,"Playing on: " + map(),vec2(256,50))
+EGP:egpAlign(4,1,1)
+EGP:egpText(5,"Maximum players: " + maxPlayers(),vec2(256,70))
+EGP:egpAlign(5,1,1)
+EGP:egpText(8,"Playing: " + gamemode(),vec2(256,160))
+EGP:egpAlign(8,1,1)
+Dedicated = isDedicated()
+if(Dedicated == 1) {
+EGP:egpText(10,"Server is dedicated!",vec2(256,220))
+EGP:egpAlign(10,1,1)  
+}
+elseif(Dedicated == 0) {
+EGP:egpText(10,"Server isnt dedicated!",vec2(256,220))
+EGP:egpAlign(10,1,1)  
+}
+Day = time("wday")
+if(Day == 1) {
+EGP:egpText(7,"Current day: Sunday",vec2(256,130))
+EGP:egpAlign(7,1,1)
+}
+elseif(Day == 2) {
+EGP:egpText(7,"Current day: Monday",vec2(256,130))
+EGP:egpAlign(7,1,1)
+}
+elseif(Day == 3) {
+EGP:egpText(7,"Current day: Tuesday",vec2(256,130))
+EGP:egpAlign(7,1,1)
+}
+elseif(Day == 4) {
+EGP:egpText(7,"Current day: Wednesday",vec2(256,130))
+EGP:egpAlign(7,1,1)
+}
+elseif(Day == 5) {
+EGP:egpText(7,"Current day: Thursday",vec2(256,130))
+EGP:egpAlign(7,1,1)
+}
+elseif(Day == 6) {
+EGP:egpText(7,"Current day: Friday",vec2(256,130))
+EGP:egpAlign(7,1,1)
+}
+elseif(Day == 7) {
+EGP:egpText(7,"Current day: Saturday",vec2(256,130))
+EGP:egpAlign(7,1,1)
+}
+}  
+start()
+}
+EGP:egpText(6,"Current time: " + time("hour") + ":" + time("min") + ":" + time("sec") + " UTC",vec2(256,100))
+EGP:egpAlign(6,1,1)
+EGP:egpText(9,"Players online: " + numPlayers(),vec2(256,190))
+EGP:egpAlign(9,1,1)
+ 
+findByClass("player")
+ClosestPlayer=findClosest(entity():pos())
+if(ClosestPlayer&ClosestPlayer:pos():distance(entity():pos())<50000){
+EGP:egpBox(12,vec2(256,400),vec2(300,230))
+EGP:egpColor(12,vec(60,60,60))
+EGP:egpText(13,"Name: " + ClosestPlayer:name(),vec2(256,300))
+EGP:egpAlign(13,1,1)
+EGP:egpText(14,"Money: $" + ClosestPlayer:money(),vec2(256,330))
+EGP:egpAlign(14,1,1)
+EGP:egpText(15,"SteamID: " + ClosestPlayer:steamID(),vec2(256,360))
+EGP:egpAlign(15,1,1)
+EGP:egpText(16,"Job: " + ClosestPlayer:team():teamName(),vec2(256,390))
+EGP:egpAlign(16,1,1)
+EGP:egpText(17,"Health: " + ClosestPlayer:health(),vec2(256,420))
+EGP:egpAlign(17,1,1)
+EGP:egpText(18,"Armor: " + ClosestPlayer:armor(),vec2(256,450))
+EGP:egpAlign(18,1,1)
+EGP:egpText(19,"Deaths: " + ClosestPlayer:deaths(),vec2(256,480))
+EGP:egpAlign(19,1,1)
+#EGP:egpText(20,"You can test your luck with !roll [amount]",vec2(256,500))
+#EGP:egpAlign(20,1,1)
+}
+#runOnChat(1)
+#if (chatClk()) {
+#    local Player = lastSpoke()
+#    local String = lastSaid():explode(" ")
+# 
+#    if (String[1, string] == "!d") {
+#        moneyRequest(Player, String[2, string]:toNumber(), 10)
+#    }
+#}

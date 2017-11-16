@@ -1,0 +1,140 @@
+@name Game
+@inputs Success EGP:wirelink
+@outputs Tile1 Tile2 Tile3 Tile4 Tile5 Tile6 Tile7 Tile8 Tile9 Tile10 Tile11 Tile12
+@persist Timer Timer2 Random Red:vector Blue:vector Green:vector Fast
+
+if(first()) {
+EGP:egpClear()
+Green = vec(0,255,0)
+Red = vec(255,0,0)
+Blue = vec(0,0,255)
+EGP:egpBox(1,vec2(256,256),vec2(300,300))
+EGP:egpColor(1,vec(75,75,75))
+EGP:egpWedge(2,vec2(256,256),vec2(110,110))
+EGP:egpColor(2,vec(85,255,55))
+EGP:egpSize(2,360)
+EGP:egpWedge(3,vec2(256,256),vec2(100,100))
+EGP:egpColor(3,vec(51,51,51))   
+EGP:egpSize(3,360)
+Timer = 60
+Fast = 1400
+timer("start",0)
+}
+if(clk("start")) {
+Timer = Timer - 1
+Timer2 = Timer * 6
+EGP:egpSize(2,Timer2) 
+EGP:egpText(4,"" + Timer,vec2(256,256))
+EGP:egpAlign(4,1,1)  
+if(Timer != 0) {
+timer("start",1000)
+}
+else {
+timer("game",100)   
+}
+}
+if(clk("game")) {
+Timer = 60
+Timer2 = Timer * 6
+stoptimer("start")
+timer("timer",0)
+timer("Colorpick",2000)
+soundPlay(1,0,"crash/crash_music.mp3")
+}
+if(clk("Colorpick")) {
+Random = randint(1,3) 
+Fast = Fast - 100
+if(Random == 1) {
+EGP:egpColor(3,Red) 
+timer("red",Fast)   
+}
+if(Random == 2) {
+EGP:egpColor(3,Green)    
+timer("green",Fast) 
+}
+if(Random == 3) {
+EGP:egpColor(3,Blue)  
+timer("blue",Fast)   
+}    
+timer("Colorpick",6000)
+}
+if(clk("timer")) {
+Timer = Timer - 1
+Timer2 = Timer * 6
+EGP:egpSize(2,Timer2)
+EGP:egpText(4,"" + Timer,vec2(256,256))
+EGP:egpAlign(4,1,1)  
+if(Timer != 0) {
+timer("timer",1000)   
+}  
+else {
+timer("reset",0)   
+}
+}
+if(clk("reset")) {
+Tile1 = 1
+Tile2 = 1
+Tile3 = 1
+Tile4 = 1
+Tile5 = 1
+Tile6 = 1
+Tile7 = 1
+Tile8 = 1
+Tile9 = 1
+Tile10 = 1
+Tile11 = 1
+Tile12 = 1    
+timer("reset2",3000)
+}
+if(clk("reset2")) {
+reset()   
+}
+if(clk("red")) {
+Tile1 = 1
+Tile3 = 1
+Tile4 = 1
+Tile6 = 1
+Tile7 = 1
+Tile9 = 1
+Tile11 = 1
+Tile12 = 1   
+timer("stop",2000)
+} 
+if(clk("green")) {
+Tile1 = 1
+Tile2 = 1
+Tile3 = 1
+Tile5 = 1
+Tile6 = 1
+Tile8 = 1
+Tile10 = 1
+Tile11 = 1  
+ 
+timer("stop",2000)
+}
+if(clk("blue")) {
+Tile2 = 1
+Tile4 = 1
+Tile5 = 1
+Tile7 = 1
+Tile8 = 1
+Tile9 = 1
+Tile10 = 1
+Tile12 = 1   
+timer("stop",2000)
+}  
+
+if(clk("stop")) {
+Tile1 = 0
+Tile2 = 0
+Tile3 = 0
+Tile4 = 0
+Tile5 = 0
+Tile6 = 0
+Tile7 = 0
+Tile8 = 0
+Tile9 = 0
+Tile10 = 0
+Tile11 = 0
+Tile12 = 0   
+}

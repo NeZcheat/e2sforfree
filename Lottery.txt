@@ -1,0 +1,139 @@
+@name Lottery_normal
+@inputs EGP:wirelink
+@outputs 
+@persist Amount1 Players:array Pot Player2:entity Pos Seconds Anim Player:entity LastSaid:array Autowin Random Minimum Ad:string Adon Amount2
+@trigger
+if(first()) {
+if(fileCanLoad()) {
+#httpRequest("http://pastebin.com/raw/hjC7YEnD")
+#fileWrite(">garrysmod/data/Expression2/Lottery_update.txt",httpData())
+#print(httpData())
+}
+}
+if(fileLoaded()) {
+print("Finished downloading latest lottery e2")   
+}
+if(first()) {
+print("Use !pick if you want to pick a random winner prematurely")
+print("Also say !advert [your advertisement] to have a ad going off every 30 seconds.")
+print("(To use this you need to put in console wire_expression2_concmd_1)")
+print("To disable the advert type !dadvert")
+Minimum = 1000
+EGP:egpClear()
+Pos = 359
+Seconds = 359
+Anim = 1
+EGP:egpBox(1,vec2(256,256),vec2(512,512))
+EGP:egpColor(1,vec(75,75,75))
+EGP:egpText(2,"Lottery",vec2(256,30))
+EGP:egpAlign(2,1,1)
+EGP:egpSize(2,160)
+EGP:egpWedge(3,vec2(256,256),vec2(190,190))
+EGP:egpColor(3,vec(85,255,55))
+EGP:egpSize(3,Pos) #some math to define the status 360 degrees is full
+EGP:egpWedge(4,vec2(256,256),vec2(180,180))
+EGP:egpColor(4,vec(51,51,51))
+EGP:egpSize(4,360)
+EGP:egpText(6,"Say !lotto [Amount] to join!",vec2(256,490))
+EGP:egpSize(6,40)
+EGP:egpAlign(6,1,1)
+EGP:egpText(7,"Pot is: $" + Pot,vec2(256,350))
+EGP:egpAlign(7,1,1)
+EGP:egpSize(7,20)
+EGP:egpText(8,"Minimum price for entry: $" + Minimum,vec2(256,465))
+EGP:egpAlign(8,1,1)
+EGP:egpSize(8,35)
+timer("start",0)
+timer("pick",360000)
+}      
+runOnChat(1)                                                                                                                       
+if(chatClk()){
+local LastSaid = lastSaid():explode(" ")
+local Player = lastSpoke()
+if(LastSaid[1,string] == "!lotto" & LastSaid[2,string]:toNumber() >= Minimum) {
+hideChat(1)
+#moneyRequest(Player,LastSaid[2,string]:toNumber(),10,"Buy a ticket")
+Amount1 = LastSaid[2,string]:toNumber() * 0.90
+Amount2 = LastSaid[2,string]:toNumber()
+Player2 = Player
+}
+}
+if(chatClk()){
+local LastSaid = lastSaid():explode(" ")
+local Player = lastSpoke()
+if(LastSaid[1,string] == "!pick" & Player == owner()) {
+hideChat(1)
+print("Picking winner...")
+stoptimer("pick")
+timer("pick",5000)
+}
+}
+if(chatClk()){
+local LastSaid = lastSaid():explode(" ")
+local Player = lastSpoke()
+if(LastSaid[1,string] == "!advert" & Player == owner()) {
+hideChat(1)
+timer("advertisement",30000)
+print("Starting from now every 30 seconds your ad will be advertised using /advert, disable this by saying !dadvert")
+Ad = LastSaid[2,string]
+Adon = 1
+}
+}
+if(chatClk()){
+local LastSaid = lastSaid():explode(" ")
+local Player = lastSpoke()
+if(LastSaid[1,string] == "!dadvert" & Player == owner()) {
+hideChat(1)
+print("You have succesfully cancelled adverting for the lottery")
+Adon = 0
+}
+}
+if(clk("advertisement")) {
+if(Adon == 1) {
+concmd("say /advert " + Ad)   
+timer("advertisement",30000)
+}
+}
+if(moneyClk("Buy a ticket")) {
+Pot = Pot + Amount1
+Pot = ceil(Pot)  
+EGP:egpText(7,"Pot is: $" + Pot,vec2(256,350))
+EGP:egpAlign(7,1,1)
+EGP:egpSize(7,20)
+while (Amount2 > 0) {
+interval(100)
+Amount2 = Amount2 - 1000
+Players:pushEntity(Player2)  
+}
+print(Players)
+}
+if(clk("start")) {
+if(Anim == 1) {
+Seconds = Seconds - 1
+Pos = Pos - 1
+EGP:egpText(5,"" + Seconds + "",vec2(256,256))
+EGP:egpSize(5,80)
+EGP:egpAlign(5,1,1)
+EGP:egpSize(3,Pos)
+if(Seconds == 270) {
+EGP:egpColor(3,vec(255,178,35))
+}
+if(Seconds == 90) {
+EGP:egpColor(3,vec(255,0,0))
+}
+timer("start",1000)
+}
+}
+if(clk("pick")) {
+Anim = 0   
+Random = randint(1,Players:count())
+#moneyGive(Players[Random,entity],Pot)
+concmd("say /a Winner: " + Players[Random,entity]:name())
+reset()
+}
+                                                                                                                                                                   
+if(first()) {
+if(Players:exists(2) == 0) {
+Players:remove(1)
+}   
+}

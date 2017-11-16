@@ -5,37 +5,33 @@
 @persist Lastuser: entity Cost Expired Rented Money Minutes1 Minutes2 Minutes3 Minutes4 Minutes5
 @persist Timer1 Timer2 Timer3 Timer4 Timer5 Cost2 LastUser1: entity LastUser2: entity LastUser3: entity LastUser4: entity LastUser5: entity
 @persist Owner1: entity Owner2: entity Owner3: entity Owner4: entity Owner5: entity News: string
-@persist Roomtext: array#### SETUP#####[
-    First put the Buy EGP on the first floor.Then wire the EGP: wirelink and the User: entity inputs from the E2 to the EGP.(Dont put the User: entity into create entity) Then put props that are fading doors infront of all the rooms in the hotel Then wire the first floors "Fade"
-    input(from the fading door) to the E2 's Fade1 Output
-    Then wire the second floors "Fade"
-    input(from the fading door) to the E2 's Fade2 Output
-    Then wire the third floors "Fade"
-    input(from the fading door) to the E2 's Fade3 Output
-    Then wire the fourth floors "Fade"
-    input(from the fading door) to the E2 's Fade4 Output
-    Then wire the fifth floors "Fade"
-    input(from the fading door) to the E2 's Fade5 Output
-    Then put 1 EGP next to the door on each floor Then wire User1: entity and Room1: wirelink to the First floors EGP.Then wire User2: entity and Room2: wirelink to the Second floors EGP.Then wire User3: entity and Room3: wirelink to the Third floors EGP.Then wire User4: entity and Room4: wirelink to the Fourth floors EGP.Then wire User5: entity and Room5: wirelink to the Fifth floors EGP.Now spawn the chip at the same location as you did before(Refres the chip) Done!If you see any bugs or anything like that report it to ilm9001.
-]#
-Roomtext = array(#This is the descriptions
-    for the rooms.Every floor is 4 lines.#Floor1 "A normal room on this floor",
+@persist Roomtext: array
+Roomtext = array(
+    #This is the descriptions for the rooms. Every floor is 4 lines.
+    #Floor1 
+    "A normal room on this floor",
     "No windows",
     "Good for shipments as they dont get noticed",
-    "Has a control EGP", #Floor2 "A normal room on this floor",
+    "Has a control EGP", 
+    #Floor2 
+    "A normal room on this floor",
     "No windows",
     "Good for shipments as they dont get noticed",
-    "Has a control EGP", #Floor3 "Normal room on the 2nd floor",
+    "Has a control EGP", 
+     #Floor3 
+     "Normal room on the 2nd floor",
     "No windows",
     "Good for printers",
-    "Has a control EGP", #Floor4 "A normal room on the 2nd floor",
+    "Has a control EGP",
+     #Floor4 
+    "A normal room on the 2nd floor",
     "No windows",
     "Good for printers",
-    "Has a control EGP", #Floor5 "A very big room on the top floor",
+    "Has a control EGP", 
+    #Floor5 "A very big room on the top floor",
     "Has windows",
     "A very big room for its price!",
     "Has a  control EGP"
-)#### SETUP####
 if (User & User) {
     Lastuser = User
 }

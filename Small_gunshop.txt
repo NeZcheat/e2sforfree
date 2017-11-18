@@ -1,0 +1,30 @@
+@name Small gunshop
+@inputs Ranger:entity EGP:wirelink
+@outputs User
+@persist 
+@trigger 
+if(first()) {
+function start() {
+EGP:egpClear()
+EGP:egpText(1,"Type in !buy to buy "+ Ranger:shipmentName() +"for $"+ (Ranger:shipmentPrice()+7000),vec2(256,256))
+EGP:egpAlign(1,1,1)
+EGP:egpSize(1,11)
+}
+start()
+}
+
+runOnChat(1)                                                                                                                       
+if(chatClk()){
+local LastSaid = lastSaid():explode(" ")
+local Player = lastSpoke()
+if(LastSaid[1,string] == "!buy") {
+moneyRequest(Player,Ranger:shipmentPrice() + 7000,"Buy a gun") 
+}
+}
+if(moneyClk("Buy a gun")) {
+User = 1
+timer("stop",500)   
+}
+if(clk("stop")) {
+User = 0   
+}

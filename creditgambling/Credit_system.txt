@@ -1,0 +1,101 @@
+@name Credit system
+@inputs EGP:wirelink Player1:entity Usedcreds Woncreds
+@outputs Credits Startcreds Players:array
+@persist Rate Mincredbuy Mincredsell Maxcredsell
+@autoupdate 
+if(first()) {
+    #1 Player steamID
+    #2 Credits
+    Players = array(owner():steamID(),50)
+    #CONFIG START#
+    Rate = 100 #Buy 1 credit for money of this number.
+    Mincredbuy = 75 #Minimum credits you need to buy
+    Maxcredsell = 1000 #Max credits you can sell at once.
+    Startcreds = 50 #Start credits for a player when they first join
+    Mincredsell = 51 #Minimum credits that need to be sold (Recommended to be more than startcreds so youre not giving out free money.)
+    #CONFIG END#
+    EGP:egpClear()
+    EGP:egpBox(1,vec2(400,400),vec2(95,70))
+    EGP:egpColor(1,vec(75,75,75))
+    EGP:egpText(2,"Credits: " + Credits,vec2(400,400))
+    EGP:egpAlign(2,1,1)
+    EGP:egpSize(2,15)
+    EGP:egpText(3,"!buy <amount> for more",vec2(400,430))
+    EGP:egpAlign(3,1,1)
+    EGP:egpSize(3,9)
+    EGP:egpText(4,"1Cred for $" + Rate,vec2(400,415))
+    EGP:egpAlign(4,1,1)
+    EGP:egpSize(4,13)
+    function number array:hasString(String:string) {
+        for (I = 1, This:count()) {
+            if (This[I, string] == String) { return 1 }
+        }
+        return 0
+    }
+    function number array:doesntHaveString(String:string) {
+        for (I = 1, This:count()) {
+            if (This[I, string] == String) { return 0 }
+        }
+        return 1
+    }
+}
+runOnChat(1)                                                                                                                       
+if(chatClk()){
+    local LastSaid = lastSaid():explode(" ")
+    local Player = lastSpoke()
+    if(LastSaid[1,string] == "!buy") {
+        if(LastSaid[2,string]:toNumber() >= Mincredbuy) {   
+            moneyRequest(Player,LastSaid[2,string]:toNumber() * Rate,10,"Buy credits")
+         }
+    }
+}
+if(chatClk()){
+    local LastSaid = lastSaid():explode(" ")
+    local Player = lastSpoke()
+    if(LastSaid[1,string] == "!sell") {
+        print(Player)
+        print(Player1)
+        if(Player == Player1) {
+            if(LastSaid[2,string]:toNumber() >= Mincredsell & LastSaid[2,string]:toNumber() <= Maxcredsell) {   
+                moneyGive(Player1,LastSaid[2,string]:toNumber() * Rate)
+                Credits = Credits - LastSaid[2,string]:toNumber()
+                EGP:egpText(2,"Credits: " + Credits,vec2(400,400))
+                EGP:egpAlign(2,1,1)
+                EGP:egpSize(2,15)
+            }
+        }
+    }
+}
+if(moneyClk("Buy credits")) {
+    Credits = Credits + moneyClkAmount() / Rate
+    EGP:egpText(2,"Credits: " + Credits,vec2(400,400))
+    EGP:egpAlign(2,1,1)
+    EGP:egpSize(2,15)
+}
+if(changed(Usedcreds)) {
+    Credits = Credits - Usedcreds   
+    EGP:egpText(2,"Credits: " + Credits,vec2(400,400))
+    EGP:egpAlign(2,1,1)
+    EGP:egpSize(2,15)
+}
+if(changed(Woncreds)) {
+    Credits = Credits + Woncreds  
+    EGP:egpText(2,"Credits: " + Credits,vec2(400,400))
+    EGP:egpAlign(2,1,1)
+    EGP:egpSize(2,15)
+}
+if(changed(Player1)) {
+    local Index = Players:hasString(Player1:steamID())
+    if(Players:hasString(Player1:steamID())) {
+        Credits = Players[Index + 1, number]
+    }
+    elseif(Players:doesntHaveString(Player1:steamID())) {
+        Credits = Startcreds
+        Players:pushString(Player1:steamID())
+        Players:pushNumber(Startcreds)
+    }
+    print(Players)
+    EGP:egpText(2,"Credits: " + Credits,vec2(400,400))
+    EGP:egpAlign(2,1,1)
+    EGP:egpSize(2,15)
+}

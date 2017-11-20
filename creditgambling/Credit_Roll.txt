@@ -1,0 +1,100 @@
+@name Credit roll
+@inputs EGP:wirelink User:entity Credits 
+@outputs Usedcredits Woncredits Player1:entity
+@persist Cost LastUser:entity N
+@persist Custom 
+if(~User & User) {
+    Player1 = User   
+}
+if(first()) {
+###Config###   
+Cost = 50 #Cost of 1 spin in credits.
+Custom = 1 #The default amount of rolls (The more it is the higher the cost)
+###Config###
+    function start() {
+        EGP:egpClear()
+        EGP:egpBox(1,vec2(256,256),vec2(512,512))
+        EGP:egpColor(1,vec(75,75,75))
+        #EGP:egpBox(2,vec2(256,365),vec2(512,50))
+        #EGP:egpColor(2,vec(0,0,0))   
+        EGP:egpCircle(3,vec2(256,206),vec2(100,100))
+        EGP:egpColor(3,vec(50,50,50))
+        EGP:egpText(4,"Play",vec2(256,206))
+        EGP:egpAlign(4,1,1)
+        EGP:egpSize(4,30)
+        EGP:egpText(5,"Credit roll",vec2(256,20))
+        EGP:egpAlign(5,1,1)
+        EGP:egpSize(5,30)
+        EGP:egpText(6,Cost + " credits per roll.",vec2(256,40))
+        EGP:egpAlign(6,1,1)
+    }
+    function number wirelink:onClick(Player:entity,ID){
+        local P=This:egpPos(ID)
+        local H=This:egpSize(ID)/2
+        return inrange(This:egpCursor(Player),P-H,P+H)
+    } 
+    start()
+}
+if(EGP:onClick(User,3)) {
+    if(Credits >= Cost) {
+        Usedcredits = 50
+        timer("stop",20)
+        EGP:egpRemove(3)
+        EGP:egpRemove(4)
+        timer("roll",10)   
+        timer("roll2",1970)
+    }
+}
+if(clk("stop")) {
+    Usedcredits = 0
+    Woncredits = 0   
+}
+if(clk("roll")) {
+    N = randint(0,100)
+    if(N >= 50 & N <= 60) {
+        EGP:egpText(7,"Credits back",vec2(256,206))
+        EGP:egpAlign(7,1,1)
+    }
+    if(N >= 80 & N <= 99) {
+        EGP:egpText(7,"Win x3",vec2(256,206))  
+        EGP:egpAlign(7,1,1)
+    }
+    if(N == 100) {
+        EGP:egpText(7,"Win x5",vec2(256,206))
+        EGP:egpAlign(7,1,1)
+    }  
+    if(N <= 50) {
+        EGP:egpText(7,"Lose",vec2(256,206))
+        EGP:egpAlign(7,1,1)
+    } 
+    if(N <= 80 & N >= 60) {
+        EGP:egpText(7,"Lose",vec2(256,206))
+        EGP:egpAlign(7,1,1)
+    }
+    timer("roll",50)
+}
+if(clk("roll2")) {
+    stoptimer("roll")
+    if(N >= 50 & N <= 60) {
+        Woncredits = Cost
+    }
+    if(N >= 80 & N <= 99) {
+        Woncredits = Cost * 3 
+    }
+    if(N == 100) {
+        Woncredits = Cost * 5 
+    }  
+    if(N <= 50) {
+    } 
+    if(N <= 80 & N >= 60) {
+    }   
+    timer("stop",10)
+    timer("stoproll",1000)    
+}
+if(clk("stoproll")) {
+    EGP:egpCircle(3,vec2(256,206),vec2(100,100))
+    EGP:egpColor(3,vec(50,50,50))
+    EGP:egpText(4,"Play",vec2(256,206))
+    EGP:egpAlign(4,1,1)
+    EGP:egpSize(4,30)   
+}

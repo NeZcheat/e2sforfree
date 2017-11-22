@@ -1,0 +1,64 @@
+@name Advertisement
+@inputs Name:string EGP:wirelink
+@outputs 
+@persist Pos:vector2 Pos2:vector2 Color:vector
+if(first()) {
+EGP:egpClear()
+EGP:egpBox(3,vec2(256,256),vec2(512,512))
+EGP:egpColor(3,vec(75,75,75))
+EGP:egpBoxOutline(9,vec2(0,512),vec2(1,1))
+EGP:egpTriangle(2,vec2(200,0),vec2(100,512),vec2(0,0))    
+EGP:egpColor(2,vec(50,170,255))
+EGP:egpBoxOutline(10,vec2(0,0),vec2(1,1))
+EGP:egpParent(2,10)
+EGP:egpTriangle(1,vec2(200,512),vec2(150,0),vec2(0,512))
+EGP:egpColor(1,vec(56,205,255))
+EGP:egpParent(1,9)
+EGP:egpBox(4,vec2(80,256),vec2(170,512))
+EGP:egpColor(4,vec(56,205,255))
+EGP:egpText(5,Name,vec2(450,256))
+EGP:egpAlign(5,1,1)
+EGP:egpAngle(5,-90)
+EGP:egpSize(5,50)
+EGP:egpText(6,"Please read the rules on our discord, and the forums are on ilm9001.com (list icon)",vec2(400,256))
+EGP:egpAlign(6,1,1)
+EGP:egpAngle(6,-90)
+EGP:egpSize(6,14)
+EGP:egpText(7,"https://discord.gg/GDhTmsx",vec2(350,256))
+EGP:egpAlign(7,1,1)
+EGP:egpAngle(7,-90)
+EGP:egpSize(7,40)
+EGP:egpText(8,"This e2 on ilm9001.com (Then go to my github)",vec2(10,256))
+EGP:egpAlign(8,1,1)
+EGP:egpAngle(8,-90)
+EGP:egpSize(8,20)
+timer("anim",0)
+timer("animstop",4980)
+Pos = vec2(0,0)
+Pos2 = vec2(0,0)
+}
+if(clk("anim")) {
+Pos = Pos + vec2(0.25,0)
+Pos2 = Pos2 + vec2(0.18,0)
+EGP:egpPos(9,Pos) 
+EGP:egpPos(10,Pos2)  
+timer("anim",50)
+}
+if(clk("animstop")) {
+stoptimer("anim")
+timer("anim2",0)
+timer("anim2stop",4980)
+}
+if(clk("anim2")) {
+Pos = Pos - vec2(0.25,0)
+Pos2 = Pos2 - vec2(0.18,0)
+EGP:egpPos(9,Pos) 
+EGP:egpPos(10,Pos2)     
+timer("anim2",50)
+}
+if(clk("anim2stop")) {
+stoptimer("anim2")
+timer("anim",0)
+timer("animstop",4980) 
+}
+

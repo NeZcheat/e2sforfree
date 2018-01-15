@@ -1,0 +1,108 @@
+@name Toll
+@inputs EGP:wirelink User:entity
+@outputs Fade1 Fade2
+@persist Cost Cost2
+@persist UP:array Any Door:vector 
+@persist Lastuser:entity Break
+@trigger 
+if(User & User) {
+Lastuser = User   
+}
+if(first()) {
+##Config##
+Cost = 100#Cost of 1 pass
+Fade1 = 1 #Set Fade1 to your entrance
+Fade2 = 0 #Set Fade2 to your exit
+##Config##
+Cost2 = Cost * 50
+function start() {
+EGP:egpClear()
+EGP:egpBox(1,vec2(256,256),vec2(512,512))
+EGP:egpColor(1,vec(75,75,75))
+EGP:egpBox(2,vec2(256,256),vec2(300,300))   
+EGP:egpColor(2,vec(100,100,100))     
+EGP:egpText(3,"Toll",vec2(215,100))
+EGP:egpSize(3,60)
+EGP:egpText(4,"Buy passes to get to restricted areas",vec2(120,170))
+EGP:egpBox(5,vec2(256,256),vec2(100,30))
+EGP:egpColor(5,vec(125,125,125))
+EGP:egpText(6,"Buy a pass",vec2(256,256))
+EGP:egpAlign(6,1,1)
+EGP:egpText(7,"Made by ilm9001",vec2(256,450))
+EGP:egpText(8,"Publicly distributed at pastebin.com/xFtCASvj",vec2(256,500))
+EGP:egpAlign(7,1,1)
+EGP:egpAlign(8,1,1)
+EGP:egpBox(9,vec2(256,300),vec2(110,30))
+EGP:egpColor(9,vec(125,125,125))
+EGP:egpText(10,"Buy unlimited passes",vec2(256,300))
+EGP:egpAlign(10,1,1)
+EGP:egpSize(10,12)
+EGP:egpText(11,"If you have a Unlimited pass use the Buy a pass button",vec2(256,220))
+EGP:egpSize(11,12)
+EGP:egpAlign(11,1,1)
+}
+function number array:hasString(String:string) {
+    for (I = 1, This:count()) {
+        if (This[I, string] == String) { return 1 }
+    }
+    return 0
+}
+function number array:doesntHaveString(String:string) {
+    for (I = 1, This:count()) {
+        if (This[I, string] == String) { return 0 }
+    }
+    return 1
+}
+function number wirelink:onClick(Player:entity,ID){
+        local P=This:egpPos(ID)
+        local H=This:egpSize(ID)/2
+        return inrange(This:egpCursor(Player),P-H,P+H)
+} 
+start()
+}
+
+if(EGP:onClick(User,5)) {
+    if(Break == 0) {
+    if(User:name() == "ilm9001") {
+    Fade1 = 0
+    Fade2 = 1
+    timer("money",2000)
+    }
+    elseif(User:name() == "DenegatE ilm9001") {
+    Fade1 = 0
+    Fade2 = 1
+    timer("money",2000)   
+    }
+    elseif(UP:hasString(User:name())) {
+    Fade1 = 0
+    Fade2 = 1
+    timer("money",2000)  
+    }
+    else {
+    moneyRequest(User,Cost,10,"Pass")
+}
+}
+}
+if(EGP:onClick(User,9)) {
+if(UP:doesntHaveString(User:name())) {
+moneyRequest(User,Cost2,10,"Buy unlimited passes")
+}
+}
+
+if(moneyClk("Buy unlimited passes")) {
+UP:pushString(Lastuser:name())
+print(UP)
+}
+
+if(moneyClk("Pass")) {
+Fade1 = 0
+Fade2 = 1
+timer("money",2000)
+}
+if(clk("money")) {
+Fade1 = 1
+Fade2 = 0   
+}
+if(first()) {
+UP = array(owner():name())   
+}
